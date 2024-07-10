@@ -23,12 +23,12 @@ export const getPawnMoves = (row: number, col: number, isWhite: boolean, board: 
         }
       }
       // Capture diagonally left
-      if (isOnBoard(row + direction, col - 1) && isOpponentPiecePawn(row + direction, col - 1, isWhite, board)) {
+  if (isOnBoard(row + direction, col - 1) && isOpponentPiecePawn(row + direction, col - 1, isWhite, board)) {
         moves.push([row + direction, col - 1]);
       }
 
       // Capture diagonally right
-      if (isOnBoard(row + direction, col + 1) && isOpponentPiecePawn(row + direction, col + 1, isWhite, board)) {
+  if (isOnBoard(row + direction, col + 1) && isOpponentPiecePawn(row + direction, col + 1, isWhite, board)) {
         moves.push([row + direction, col + 1]);
       }
 

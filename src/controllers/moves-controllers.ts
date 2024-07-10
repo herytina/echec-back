@@ -56,7 +56,6 @@ export const getKingMovesController = (req: Request, res: Response): void => {
   }
 
   const moves = getKingMoves(row, col, isWhite, board);
-  console.log("🚀 ~ moves:", moves)
   res.json({ moves });
 };
 
@@ -68,6 +67,5 @@ export const getKingRookMovesController = (req: Request, res: Response): void =>
   }
 
   const moves = getKingRookMoves(row, col,direction,kingMoved, isWhite, board);
-  console.log("🚀 ~ moves:", moves)
   res.json({ moves });
 };

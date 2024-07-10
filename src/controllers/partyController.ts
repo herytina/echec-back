@@ -84,8 +84,28 @@ export const updateParty = (req: Request, res: Response) => {
       return;
     }
     res.status(200).json(results);
+    wss.clients.forEach(client => {
+        if (client.readyState === client.OPEN) {
+          client.send(JSON.stringify({ event: 'letsPlay', data: {status:status, id:id} }));
+        }
+      });
   });
 };
+
+// PUT - party board
+
+export const updateBoardByPartyId = (req: Request) => {
+  const { id } = req.params
+  const { board, status, currentPlayer, isTopTimer, isBottomTimer, selectedPiece } = req.body
+  // const updatedAt = new Date().toLocaleDateString()
+
+  // connection.query('UPDATE party SET board = ?, updatedAt = ? WHERE id =?', [board, updatedAt, parseInt(id)],)
+  wss.clients.forEach(client => {
+    if (client.readyState === client.OPEN) {
+      client.send(JSON.stringify({ event: 'upBoard', data: {board:board, status:status, currentPlayer:currentPlayer,id:id,isTopTimer:isTopTimer,isBottomTimer:isBottomTimer, selectedPiece:selectedPiece } }));
+    }
+  });
+}
 
 // DELETE - Supprimer une partie par son ID
 export const deleteParty = (req: Request, res: Response) => {
