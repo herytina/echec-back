@@ -4,7 +4,6 @@ export const createPartyInDB = async (partyData: { name: string; mise: number; p
   const { name, mise, players, status, createdAt } = partyData;
   const query = 'INSERT INTO party (name, mise, players, status, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?)';
   const values = [name, mise, players, status, createdAt, createdAt];
-
   return new Promise((resolve, reject) => {
     connection.query(query, values, (err, results) => {
       if (err) {

@@ -96,13 +96,11 @@ export const updateParty = (req: Request, res: Response) => {
 
 export const updateBoardByPartyId = (req: Request) => {
   const { id } = req.params
-  const { board, status, currentPlayer, isTopTimer, isBottomTimer, selectedPiece } = req.body
-  // const updatedAt = new Date().toLocaleDateString()
-
-  // connection.query('UPDATE party SET board = ?, updatedAt = ? WHERE id =?', [board, updatedAt, parseInt(id)],)
+  const { board, status, currentPlayer, isTopTimer, isBottomTimer, selectedPiece, lastMove } = req.body
+  
   wss.clients.forEach(client => {
     if (client.readyState === client.OPEN) {
-      client.send(JSON.stringify({ event: 'upBoard', data: {board:board, status:status, currentPlayer:currentPlayer,id:id,isTopTimer:isTopTimer,isBottomTimer:isBottomTimer, selectedPiece:selectedPiece } }));
+      client.send(JSON.stringify({ event: 'upBoard', data: {board:board, status:status, currentPlayer:currentPlayer,id:id,isTopTimer:isTopTimer,isBottomTimer:isBottomTimer, selectedPiece:selectedPiece, lastMove:lastMove } }));
     }
   });
 }

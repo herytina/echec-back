@@ -2,9 +2,9 @@ import mysql from 'mysql2';
 
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: 'anonyme04.',
-  database: 'chess_game'
+  user: 'tix',
+  password: 'anonyme',
+  database: 'chess'
 });
 
 export default connection;

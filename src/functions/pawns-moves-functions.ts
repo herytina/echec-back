@@ -23,12 +23,12 @@ export const getPawnMoves = (row: number, col: number, isWhite: boolean, board: 
         }
       }
       // Capture diagonally left
-  if (isOnBoard(row + direction, col - 1) && isOpponentPiecePawn(row + direction, col - 1, isWhite, board)) {
+      if (isOnBoard(row + direction, col - 1) && isOpponentPiecePawn(row + direction, col - 1, isWhite, board)) {
         moves.push([row + direction, col - 1]);
       }
 
       // Capture diagonally right
-  if (isOnBoard(row + direction, col + 1) && isOpponentPiecePawn(row + direction, col + 1, isWhite, board)) {
+      if (isOnBoard(row + direction, col + 1) && isOpponentPiecePawn(row + direction, col + 1, isWhite, board)) {
         moves.push([row + direction, col + 1]);
       }
 
@@ -42,16 +42,15 @@ export const getPawnMoves = (row: number, col: number, isWhite: boolean, board: 
           if (lastToRow === row && Math.abs(lastToCol - col) === 1) {
             // Capture en passant
             if (Math.abs(lastToCol - lastFromCol) !== 1 && board[lastToRow][lastToCol].toLowerCase() === 'p') {
-              setTimeout(() => {
-                if (board[lastFromRow - direction][lastFromCol].toLowerCase() === 'p') {
+              setTimeout(()=>{
+                if(board[lastFromRow - direction][lastFromCol].toLowerCase() === ''){
                   board[lastToRow][lastToCol] = ''; // Retirer le pion capturé
                 }
-              }, 3000);
+              }, 1000)
             }
             moves.push([row + direction, lastToCol]);
           }
         }
       }
-
       return moves;
 }
