@@ -21,6 +21,7 @@ export const getPawnsMovesController = (req: Request, res: Response): void => {
     res.status(400).json({ error: 'Invalid input' });
     return;
   }
+  
   const moves = getPawnMoves(row, col, isWhite, board ,lastMove);
   res.json({ moves });
 };

@@ -1,13 +1,8 @@
 import { Request, Response } from 'express';
-import { WebSocketServer } from 'ws';
 import { createPartyInDB, getPartiesFromDB } from '../services/partyServices';
 import connection from '../utils/db.config';
+import { io } from '../app'
 
-let wss: WebSocketServer; // Déclarez une variable pour le serveur WebSocket
-
-export const setWebSocketServer = (webSocketServer: WebSocketServer) => {
-  wss = webSocketServer; // Assignez le serveur WebSocket
-};
 // GET - Récupérer toutes les parties
 export const getParties = (req: Request, res: Response) => {
   connection.query('SELECT * FROM party where status = "created"', (err, results) => {
@@ -33,11 +28,11 @@ export const getPartyById = (req: Request, res: Response) => {
     if (results) {
       res.status(200).json(results);
 
-      wss.clients.forEach(client => {
-        if (client.readyState === client.OPEN) {
-          client.send(JSON.stringify({ event: 'playIn', data: results }));
-        }
+      io.emit('partyListUpdated', {
+        event: 'partyListUpdated',
+        data: results
       });
+
     } else {
       res.status(404).json({ message: 'Partie non trouvée' });
     }
@@ -60,10 +55,9 @@ export const createParty = async (req: Request, res: Response) => {
       parties: parties, // Résultats de la requête getParties
     });
 
-    wss.clients.forEach(client => {
-        if (client.readyState === client.OPEN) {
-          client.send(JSON.stringify({ event: 'newParty', data: parties }));
-        }
+      io.emit('newParty', {
+        event: 'newParty',
+        data: parties
       });
   } catch (err) {
     console.error('Erreur lors de la création de la partie ou de la récupération des parties :', err);
@@ -83,12 +77,12 @@ export const updateParty = (req: Request, res: Response) => {
       res.status(500).json({ error: 'Erreur serveur' });
       return;
     }
+
+    io.emit('partySelected', {
+      event: 'partySelected',
+      data: {status:status, id:id}
+    });
     res.status(200).json(results);
-    wss.clients.forEach(client => {
-        if (client.readyState === client.OPEN) {
-          client.send(JSON.stringify({ event: 'letsPlay', data: {status:status, id:id} }));
-        }
-      });
   });
 };
 
@@ -97,11 +91,10 @@ export const updateParty = (req: Request, res: Response) => {
 export const updateBoardByPartyId = (req: Request) => {
   const { id } = req.params
   const { board, status, currentPlayer, isTopTimer, isBottomTimer, selectedPiece, lastMove } = req.body
-  
-  wss.clients.forEach(client => {
-    if (client.readyState === client.OPEN) {
-      client.send(JSON.stringify({ event: 'upBoard', data: {board:board, status:status, currentPlayer:currentPlayer,id:id,isTopTimer:isTopTimer,isBottomTimer:isBottomTimer, selectedPiece:selectedPiece, lastMove:lastMove } }));
-    }
+
+  io.emit('gameBoardUpdated', {
+    event: 'gameBoardUpdated',
+    data: {board:board, status:status, currentPlayer:currentPlayer,id:id,isTopTimer:isTopTimer,isBottomTimer:isBottomTimer, selectedPiece:selectedPiece, lastMove:lastMove }
   });
 }
 
