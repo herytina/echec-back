@@ -42,10 +42,10 @@ export const getPartyById = (req: Request, res: Response) => {
 // POST - Créer une nouvelle partie
 export const createParty = async (req: Request, res: Response) => {
   try {
-    const { name, mise, players, status } = req.body;
+    const { name, mise, players, status, timer } = req.body;
     const createdAt = new Date().toLocaleDateString();
 
-    const results = await createPartyInDB({ name, mise, players, status, createdAt });
+    const results = await createPartyInDB({ name, mise, players, status, timer, createdAt });
 
     const parties = await getPartiesFromDB();
 
@@ -95,6 +95,14 @@ export const updateBoardByPartyId = (req: Request) => {
   io.emit('gameBoardUpdated', {
     event: 'gameBoardUpdated',
     data: {board:board, status:status, currentPlayer:currentPlayer,id:id,isTopTimer:isTopTimer,isBottomTimer:isBottomTimer, selectedPiece:selectedPiece, lastMove:lastMove }
+  });
+}
+
+export const updatePlayerStatus = (req : Request) => {
+  const { players } = req.body
+  io.emit('readyToPlay', {
+    event: 'readyToPlay',
+    data: { players : players }
   });
 }
 

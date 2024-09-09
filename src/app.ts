@@ -29,6 +29,10 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('gameBoardUpdated', data);
   });
 
+  socket.on('readyToPlay', (data) => {
+    socket.broadcast.emit('readyToPlay', data);
+  });
+
   socket.on('partyListUpdated', (data) => {
     socket.broadcast.emit('partyListUpdated', data);
   });
