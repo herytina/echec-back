@@ -4,8 +4,11 @@ import { Router } from 'express';
 import { loginControllers } from '../controllers/login-controllers';
 import { getBishopMovesController, getKingMovesController, getKingRookMovesController, getKnightMovesController, getPawnsMovesController, getRookMovesController } from '../controllers/moves-controllers';
 import { createParty, deleteParty, getParties, getPartyById, updateParty } from '../controllers/partyController';
+// import { authenticateToken } from '../utils/authenticateToken';
 
 const router = Router();
+
+// router.use(authenticateToken);
 
 router.post('/api/knight-moves', getKnightMovesController);
 router.post('/api/pawns-moves', getPawnsMovesController);
